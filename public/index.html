@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>SkillBridge – Requests</title>
+  <meta name="description" content="Send a request to SkillBridge and follow it until it is resolved.">
+  <meta name="theme-color" content="#ffd23f">
+    <!-- Set to an absolute URL only when the API is hosted somewhere other than this page's origin. -->
+    <meta name="api-base" content="">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <main class="stage" id="main">
+
+    <!-- ======== New request ======== -->
+    <section class="panel panel-new is-open" id="panel-new" aria-labelledby="new-title">
+      <button class="tab" type="button" id="tab-new" data-open="new" aria-controls="panel-new" aria-label="New request" inert>
+        <span class="tab-icon" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><path d="M20 6v28M6 20h28" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
+        </span>
+        <span class="tab-title" aria-hidden="true">New request</span>
+      </button>
+
+      <div class="panel-body" id="body-new">
+        <p class="brand stagger" style="--i:0">SkillBridge</p>
+        <h2 class="headline stagger" id="new-title" style="--i:1" tabindex="-1">What do you<br>need help with?</h2>
+
+        <form id="request-form" class="form stagger" style="--i:2" novalidate>
+          <div class="field-row">
+            <div class="field">
+              <label for="n-name">Full name</label>
+              <input id="n-name" name="name" type="text" autocomplete="name" aria-describedby="n-name-error" required>
+              <p class="field-error" id="n-name-error" data-error-for="name" hidden></p>
+            </div>
+            <div class="field">
+              <label for="n-email">Email</label>
+              <input id="n-email" name="email" type="email" autocomplete="email" inputmode="email" aria-describedby="n-email-error" required>
+              <p class="field-error" id="n-email-error" data-error-for="email" hidden></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="n-category">Topic</label>
+            <select id="n-category" name="category" aria-describedby="n-category-error" required>
+              <option value="" disabled selected>Choose a topic</option>
+              <option value="opportunity">Opportunity enquiry</option>
+              <option value="application">Application support</option>
+              <option value="portal">Portal or account</option>
+              <option value="other">Something else</option>
+            </select>
+            <p class="field-error" id="n-category-error" data-error-for="category" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="n-subject">Subject</label>
+            <input id="n-subject" name="subject" type="text" maxlength="120" aria-describedby="n-subject-error" required>
+            <p class="field-error" id="n-subject-error" data-error-for="subject" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="n-description">What happened?</label>
+            <textarea id="n-description" name="description" rows="5" maxlength="2000" aria-describedby="n-description-hint n-description-error" required></textarea>
+            <div class="field-foot">
+              <p class="field-error" id="n-description-error" data-error-for="description" hidden></p>
+              <p class="hint" id="n-description-hint"><span data-count>0</span> of 2000 characters</p>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="button button-solid" type="submit" id="submit-btn"><span class="button-label">Send request</span></button>
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+
+        <div class="success" id="success" hidden tabindex="-1">
+          <p class="success-big">Sent.</p>
+          <p class="success-text">Your reference is <strong id="success-ref"></strong>. Keep it if you need to ask about this request again.</p>
+          <div class="success-actions">
+            <button class="button button-solid" type="button" id="go-requests">View requests</button>
+            <button class="button button-text" type="button" id="another-btn">Send another</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======== View requests ======== -->
+    <section class="panel panel-requests" id="panel-requests" aria-labelledby="requests-title">
+      <button class="tab" type="button" id="tab-requests" data-open="requests" aria-controls="panel-requests" aria-label="View requests">
+        <span class="tab-icon tab-count" aria-hidden="true" id="tab-count">–</span>
+        <span class="tab-title" aria-hidden="true">View requests</span>
+      </button>
+
+      <div class="panel-body" id="body-requests" inert>
+        <p class="brand stagger" style="--i:0">SkillBridge</p>
+        <h2 class="headline stagger" id="requests-title" style="--i:1" tabindex="-1">Where your<br>requests stand.</h2>
+
+        <div class="filters stagger" style="--i:2" role="group" aria-label="Filter requests by status" id="filters">
+          <button type="button" data-filter="all" aria-pressed="true">All</button>
+          <button type="button" data-filter="open" aria-pressed="false">Open</button>
+          <button type="button" data-filter="in_progress" aria-pressed="false">In progress</button>
+          <button type="button" data-filter="resolved" aria-pressed="false">Resolved</button>
+          <button type="button" data-filter="closed" aria-pressed="false">Closed</button>
+        </div>
+
+        <p class="list-summary stagger" style="--i:3" id="list-summary" role="status" aria-live="polite"></p>
+        <ul class="req-list stagger" style="--i:3" id="req-list" aria-busy="true"></ul>
+        <div class="state" id="list-state" hidden></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Edit dialog (PUT) -->
+  <dialog id="edit-dialog" class="dialog" aria-labelledby="edit-title">
+    <form id="edit-form" class="form" novalidate method="dialog">
+      <div class="dialog-head">
+        <h2 id="edit-title" class="dialog-title">Edit request</h2>
+        <button class="icon-close" type="button" data-close aria-label="Close dialog">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="e-name">Full name</label>
+          <input id="e-name" name="name" type="text" autocomplete="name" aria-describedby="e-name-error">
+          <p class="field-error" id="e-name-error" data-error-for="name" hidden></p>
+        </div>
+        <div class="field">
+          <label for="e-email">Email</label>
+          <input id="e-email" name="email" type="email" autocomplete="email" aria-describedby="e-email-error">
+          <p class="field-error" id="e-email-error" data-error-for="email" hidden></p>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="e-category">Topic</label>
+          <select id="e-category" name="category" aria-describedby="e-category-error">
+            <option value="opportunity">Opportunity enquiry</option>
+            <option value="application">Application support</option>
+            <option value="portal">Portal or account</option>
+            <option value="other">Something else</option>
+          </select>
+          <p class="field-error" id="e-category-error" data-error-for="category" hidden></p>
+        </div>
+        <div class="field">
+          <label for="e-status">Status</label>
+          <select id="e-status" name="status" aria-describedby="e-status-error">
+            <option value="open">Open</option>
+            <option value="in_progress">In progress</option>
+            <option value="resolved">Resolved</option>
+            <option value="closed">Closed</option>
+          </select>
+          <p class="field-error" id="e-status-error" data-error-for="status" hidden></p>
+        </div>
+      </div>
+      <div class="field">
+        <label for="e-subject">Subject</label>
+        <input id="e-subject" name="subject" type="text" maxlength="120" aria-describedby="e-subject-error">
+        <p class="field-error" id="e-subject-error" data-error-for="subject" hidden></p>
+      </div>
+      <div class="field">
+        <label for="e-description">Description</label>
+        <textarea id="e-description" name="description" rows="5" maxlength="2000" aria-describedby="e-description-error"></textarea>
+        <p class="field-error" id="e-description-error" data-error-for="description" hidden></p>
+      </div>
+
+      <div class="form-actions">
+        <button class="button button-solid" type="submit" id="edit-save"><span class="button-label">Save changes</span></button>
+        <button class="button button-text" type="button" data-close>Cancel</button>
+        <p class="form-status" id="edit-status" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
