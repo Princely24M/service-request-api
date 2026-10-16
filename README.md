@@ -1,4 +1,4 @@
-# SkillBridge Service Request API (Week 5)
+# SkillBridge Service Request API 
 
 A small Express.js REST API for submitting and managing service requests, plus a frontend that uses it.
 Data is stored in memory, so it resets when the server restarts. Persistent storage comes in a later week.
