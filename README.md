@@ -3,8 +3,8 @@
 A small Express.js REST API for submitting and managing service requests, plus a frontend that uses it.
 Data is stored in memory, so it resets when the server restarts. Persistent storage comes in a later week.
 
-## Live Demo
-https://service-request-api-2ilb.onrender.com
+## Live Demo[
+https://service-request-api-2ilb.onrender.com/
 
 
 ## Run it
